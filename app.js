@@ -5,29 +5,14 @@ createTask();
 
 
 
+
 function createTask() {
 
-
-    //create user story
-
-    // createNewUserStory().then(function(userStoryId) {
-    //     console.log(userStoryId);
-    // }).catch(function(err) {
-    //     console.error(err.message);
-    // });
-
-
-
-
-    //create task / bug
-    createTaskUnderUserStory(6)
-        .then(function(result) {
-            console.log(result);
-
-        }).catch(function(err) {
-            console.error(err);
-        });
-
+    createNewUserStory()
+    .then(createTaskUnderUserStory)
+    .catch(function(err) {
+        console.error(err.message);
+    });
 
 
 
@@ -37,20 +22,20 @@ function createNewUserStory() {
 
     var options = {
         method: 'PATCH',
-        uri: 'https://smogwhite.visualstudio.com/DefaultCollection/MyFirstProject/_apis/wit/workitems/$User Story?api-version=2.0',
+        uri: 'http://172.17.111.16:8080/tfs/DefaultCollection/testproject/_apis/wit/workitems/$Product Backlog Item?api-version=2.0',
         body: [{
             "op": "add",
             "path": "/fields/System.Title",
-            "value": "Backlog From wrapper 2"
+            "value": "Backlog From wrapper 3434"
         }, {
             'op': 'add',
             'path': '/fields/System.IterationPath',
-            'value': 'MyFirstProject\\Iteration 1'
+            'value': 'testproject\\Sprint 3'
 
         }],
         json: true,
         headers: {
-            'Authorization': 'Basic c21vZzpBbGljZTEyMzQ1NkBA',
+            'Authorization': 'Basic aXN2YW5pZHplOlRmc3VzZXIxMjMj',
             'Content-Type': 'application/json-patch+json'
         }
     };
@@ -67,27 +52,27 @@ function createTaskUnderUserStory(userStoryId) {
 
     var options = {
         method: 'PATCH',
-        uri: 'https://smogwhite.visualstudio.com/DefaultCollection/MyFirstProject/_apis/wit/workitems/$Task?api-version=2.0',
+        uri: 'http://172.17.111.16:8080/tfs/DefaultCollection/testproject/_apis/wit/workitems/$Task?api-version=2.0',
         body: [{
             "op": "add",
             "path": "/fields/System.Title",
-            "value": "new task from api 5656"
+            "value": "new task from api 345"
         }, {
             'op': 'add',
             'path': '/fields/System.IterationPath',
-            'value': 'MyFirstProject\\Iteration 1'
+            'value': 'testproject\\Sprint 3'
 
         }, {
             "op": "add",
             "path": "/relations/-",
             "value": {
                 'rel': 'System.LinkTypes.Hierarchy-Reverse',
-                'url': 'https://smogwhite.visualstudio.com/_apis/wit/workitems/6'
+                'url': 'http://172.17.111.16:8080/tfs/_apis/wit/workitems/' + userStoryId
             }
         }],
         json: true,
         headers: {
-            'Authorization': 'Basic c21vZzpBbGljZTEyMzQ1NkBA',
+            'Authorization': 'Basic aXN2YW5pZHplOlRmc3VzZXIxMjMj',
             'Content-Type': 'application/json-patch+json'
         }
     };
@@ -102,13 +87,12 @@ function createTaskUnderUserStory(userStoryId) {
 
 function getProjects() {
 
-
     var options = {
-        uri: 'https://smogwhite.visualstudio.com/DefaultCollection/_apis/projects?api-version=2.0',
+        uri: 'http://172.17.111.16:8080/tfs/DefaultCollection/_apis/projects?api-version=2.0',
 
         headers: {
-            'User-Agent': 'Request-Promise',
-            'Authorization': 'Basic c21vZzpBbGljZTEyMzQ1NkBA'
+
+            'Authorization': 'Basic aXN2YW5pZHplOlRmc3VzZXIxMjMj'
         },
         json: true
     };
@@ -118,6 +102,8 @@ function getProjects() {
             console.log(result);
         })
         .catch(function(err) {
+          console.error(err.message);
+
             // API call failed...
         });
 
