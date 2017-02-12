@@ -2,7 +2,7 @@
   "name": "tfs_api_wrapper",
   "version": "1.0.0",
   "description": "TFS management by api",
-  "main": "index.js",
+  "main": "tfsapi.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
