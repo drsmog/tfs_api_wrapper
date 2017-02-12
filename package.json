@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/drsmog/tfs_api_wrapper#readme",
   "dependencies": {
+    "bluebird": "3.4.7",
     "request": "2.79.0",
     "request-promise": "4.1.1"
   }

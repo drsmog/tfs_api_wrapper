@@ -7,13 +7,13 @@ var tfs = new require('./tfsapi.js')({
     password: 'Tfsuser123#'
 });
 
-tfs.getProjects()
-    .then(function(result) {
-        console.log(result);
-    })
-    .catch(function(err) {
-        console.error(err);
-    });
+// tfs.getProjects()
+//     .then(function(result) {
+//         console.log(result);
+//     })
+//     .catch(function(err) {
+//         console.error(err);
+//     });
 
 //
 // //Create Work item under iteration (backlog)
@@ -36,22 +36,34 @@ tfs.getProjects()
 
 
 
-tfs.createLinkedWorkItem({
-        projectName: 'testproject',
-        workItemTypeName: 'Task',
-        iterationName: 'Sprint 3',
-        title: 'Linked Task',
-        description: 'Task Description',
-        parentWorkItemId: '15'
-    })
-    .then(function(result) {
-        console.log('Status Success');
-        console.log(result);
-    })
-    .catch(function(err) {
-        console.error(err.message);
-    });
+// tfs.createLinkedWorkItem({
+//         projectName: 'testproject',
+//         workItemTypeName: 'Task',
+//         iterationName: 'Sprint 3',
+//         title: 'Linked Task',
+//         description: 'Task Description',
+//         parentWorkItemId: '15'
+//     })
+//     .then(function(result) {
+//         console.log('Status Success');
+//         console.log(result);
+//     })
+//     .catch(function(err) {
+//         console.error(err.message);
+//     });
 
+// tfs.attacheFileOnWorkItem({
+//         fileName: 'test.png',
+//         fullFileAddress: 'e:\\test.png',
+//         wrokItemId: 37
+//     })
+//     .then(function(result) {
+//
+//         console.log(result);
+//     })
+//     .catch(function(err) {
+//         console.error(err.message);
+//     });
 
 
 console.log('done');

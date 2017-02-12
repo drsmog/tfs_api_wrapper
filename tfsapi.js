@@ -1,4 +1,7 @@
+var Promise = require('bluebird');
+var readFile = Promise.promisify(require("fs").readFile);
 var rp = require('request-promise');
+
 
 function TFSAPI(options) {
     this.instance = options.instance;
@@ -18,7 +21,7 @@ TFSAPI.prototype.getProjects = function() {
         this.collectionName +
         '/_apis/projects?api-version=' + this.tfsApiVersion;
 
-    console.log(uri);
+
 
     var options = {
         uri: uri,
@@ -132,10 +135,79 @@ TFSAPI.prototype.createLinkedWorkItem = function(params) {
 
     return rp(options);
 
+};
+
+TFSAPI.prototype.attacheFileOnWorkItem = function(params) {
+
+    return readFile(params.fullFileAddress)
+        .then(function(content) {
+
+            return uploadFile.bind(this)(params, content);
+        }.bind(this))
+        .then(function attacheOnWorkItem(uploadedFileInfo) {
+            return linkUploadedFileOnWorkItem.bind(this)(JSON.parse(uploadedFileInfo), params.wrokItemId);
+        }.bind(this));
+
 
 
 };
 
-module.exports = function (options) {
-  return new TFSAPI(options);
-} ;
+
+function uploadFile(params, content) {
+    var uri =
+        'http://' + this.instance + '/' +
+        this.collectionName +
+        '/_apis/wit/attachments?filename=' + params.fileName + '&api-version=' + this.tfsApiVersion;
+
+
+    var options = {
+        method: 'POST',
+        uri: uri,
+        body: content,
+        headers: {
+            'Authorization': 'Basic ' + this.accessToken,
+            'Content-Type': 'application/octet-stream'
+        }
+    };
+
+    return rp(options);
+
+}
+
+function linkUploadedFileOnWorkItem(uploadedFileInfo, workItemId) {
+
+    var uri =
+        'http://' + this.instance + '/' +
+        this.collectionName +
+        '/_apis/wit/workitems/' + workItemId + '?api-version=' + this.tfsApiVersion;
+
+
+    var options = {
+        method: 'PATCH',
+        uri: uri,
+        body: [{
+            "op": "add",
+            "path": "/relations/-",
+            "value": {
+                "rel": "AttachedFile",
+                "url": uploadedFileInfo.url,
+                "attributes": {
+                    "comment": "uploaded"
+                }
+            }
+        }],
+        json: true,
+        headers: {
+            'Authorization': 'Basic ' + this.accessToken,
+            'Content-Type': 'application/json-patch+json'
+        }
+    };
+
+    return rp(options);
+
+}
+
+
+module.exports = function(options) {
+    return new TFSAPI(options);
+};
